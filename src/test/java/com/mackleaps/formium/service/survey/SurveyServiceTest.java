@@ -104,13 +104,10 @@ public class SurveyServiceTest {
         existing.setPrefix("Prefix");
         existing.setTitle("Title");
         existing.setDescription("Description");
-        
-        existing = surveyService.addSurvey(existing);
         existing.setId(EXISTING_ID);
         
         lista.add(existing);
 
-        when(surveyRepository.saveAndFlush(existing)).thenReturn(existing);
         when(surveyRepository.exists(EXISTING_ID)).thenReturn(true);
         when(surveyRepository.findAll()).thenReturn(lista);
 
@@ -131,13 +128,10 @@ public class SurveyServiceTest {
         existing.setPrefix("Prefix");
         existing.setTitle("Title");
         existing.setDescription("Description");
-        
-        existing = surveyService.addSurvey(existing);
         existing.setId(EXISTING_ID);
         
         lista.add(existing);
  
-        when(surveyRepository.saveAndFlush(existing)).thenReturn(existing);
         when(surveyRepository.exists(EXISTING_ID)).thenReturn(true);
         when(surveyRepository.findOne(EXISTING_ID)).thenReturn(existing);
 

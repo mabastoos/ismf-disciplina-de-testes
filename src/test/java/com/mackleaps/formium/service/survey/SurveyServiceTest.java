@@ -12,7 +12,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
@@ -73,6 +78,76 @@ public class SurveyServiceTest {
         when(surveyRepository.exists(NOT_EXISTING_SURVEY_ID)).thenThrow(new ComponentNotFoundException());
 
         surveyService.deleteSurvey(NOT_EXISTING_SURVEY_ID);
+    }
+    
+    @Test
+    public void deveRetornarListaVaziaCasoNaoExistaNenhumaInclusao() {
+
+    	List<Survey> lista = new ArrayList<Survey>();
+    	
+        when(surveyRepository.findAll()).thenReturn(lista);
+
+        List<Survey> listaPesquisas = surveyService.getAllSurveys();
+
+        assertNotNull(listaPesquisas);
+        assertEquals(0, listaPesquisas.size());
+    }
+    
+    @Test
+    public void deveRetornarListaPreenchidaAposAlgumaInclusao() {
+
+    	List<Survey> lista = new ArrayList<Survey>();
+    	
+        Long EXISTING_ID = 1L;
+
+        Survey existing = new Survey();
+        existing.setPrefix("Prefix");
+        existing.setTitle("Title");
+        existing.setDescription("Description");
+        
+        existing = surveyService.addSurvey(existing);
+        existing.setId(EXISTING_ID);
+        
+        lista.add(existing);
+
+        when(surveyRepository.saveAndFlush(existing)).thenReturn(existing);
+        when(surveyRepository.exists(EXISTING_ID)).thenReturn(true);
+        when(surveyRepository.findAll()).thenReturn(lista);
+
+        List<Survey> listaPesquisas = surveyService.getAllSurveys();
+
+        assertNotNull(listaPesquisas);
+        assertEquals(1, listaPesquisas.size());
+    }
+    
+    @Test
+    public void deveIncluirPesquisaComOsDadosCorretos() {
+
+    	List<Survey> lista = new ArrayList<Survey>();
+    	
+        Long EXISTING_ID = 1L;
+
+        Survey existing = new Survey();
+        existing.setPrefix("Prefix");
+        existing.setTitle("Title");
+        existing.setDescription("Description");
+        
+        existing = surveyService.addSurvey(existing);
+        existing.setId(EXISTING_ID);
+        
+        lista.add(existing);
+ 
+        when(surveyRepository.saveAndFlush(existing)).thenReturn(existing);
+        when(surveyRepository.exists(EXISTING_ID)).thenReturn(true);
+        when(surveyRepository.findOne(EXISTING_ID)).thenReturn(existing);
+
+        Survey pesquisa = surveyService.getSurvey(EXISTING_ID);
+
+        assertNotNull(pesquisa);
+        assertEquals(existing.getPrefix(), 		pesquisa.getPrefix());
+        assertEquals(existing.getTitle(), 		pesquisa.getTitle());
+        assertEquals(existing.getDescription(), pesquisa.getDescription());
+        assertEquals(existing.getId(), 			pesquisa.getId());
     }
 
 }

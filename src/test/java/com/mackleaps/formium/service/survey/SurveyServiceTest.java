@@ -123,25 +123,28 @@ public class SurveyServiceTest {
     	List<Survey> lista = new ArrayList<Survey>();
     	
         Long EXISTING_ID = 1L;
+        
+        Survey modelo = new Survey();
+        modelo.setPrefix("Prefix");
+        modelo.setTitle("Title");
+        modelo.setDescription("Description");
 
         Survey existing = new Survey();
         existing.setPrefix("Prefix");
         existing.setTitle("Title");
         existing.setDescription("Description");
-        existing.setId(EXISTING_ID);
         
         lista.add(existing);
  
-        when(surveyRepository.exists(EXISTING_ID)).thenReturn(true);
-        when(surveyRepository.findOne(EXISTING_ID)).thenReturn(existing);
+        when(surveyRepository.saveAndFlush(existing)).thenReturn(existing);
+        
 
-        Survey pesquisa = surveyService.getSurvey(EXISTING_ID);
+        Survey pesquisa = surveyService.addSurvey(existing);
 
         assertNotNull(pesquisa);
-        assertEquals(existing.getPrefix(), 		pesquisa.getPrefix());
-        assertEquals(existing.getTitle(), 		pesquisa.getTitle());
-        assertEquals(existing.getDescription(), pesquisa.getDescription());
-        assertEquals(existing.getId(), 			pesquisa.getId());
+        assertEquals(existing.getPrefix(), 		modelo.getPrefix());
+        assertEquals(existing.getTitle(), 		modelo.getTitle());
+        assertEquals(existing.getDescription(), modelo.getDescription());
     }
 
 }

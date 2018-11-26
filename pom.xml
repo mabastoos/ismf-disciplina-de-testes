@@ -149,6 +149,13 @@
             <artifactId>commons-beanutils</artifactId>
             <version>1.9.3</version>
         </dependency>
+        
+        <dependency>
+		    <groupId>org.apache.jmeter</groupId>
+		    <artifactId>ApacheJMeter</artifactId>
+		    <version>5.0</version>
+		</dependency>
+        
 
     </dependencies>
 
@@ -157,6 +164,11 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>2.7</version>
             </plugin>
         </plugins>
     </build>
